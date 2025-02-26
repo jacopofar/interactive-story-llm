@@ -18,4 +18,4 @@ for the frontend.
 Go to the `auto-rp` subfolder, run `npm install` and `npm run dev` to start the
 frontend.
 
-In the project root, use `uv install` and `fastapi run`.
+In the project root, use `uv sync` and `uv run fastapi run`.
