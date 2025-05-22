@@ -7,5 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "fastapi[standard]>=0.115.8",
     "httpx>=0.28.1",
+    "libtmux>=0.46.1",
     "ollama>=0.4.7",
 ]
