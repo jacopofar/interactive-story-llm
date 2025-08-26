@@ -8,36 +8,32 @@ import "../node_modules/quill/dist/quill.core.css";
 
 import Quill from 'quill';
 
-let messages = [];
 
 const quill = new Quill('#editor', {
   theme: 'snow'
 });
 
-const setLoadingState = (statusMessage: string) => {
+const addLoadingState = (statusMessage: string) => {
   const elem = document.getElementById("loadingstate");
   if(elem !== null){
-    elem.innerText = statusMessage;
+    elem.innerText += "\n" + statusMessage;
   }
 }
 
 
-const addMessageBox = (message: string, generated: boolean) => {
-  const messageCard = document.createElement("div");
-  messageCard.innerText = message;
-  messageCard.className = "storymessage " + (generated ? "generated":"manual");
-  document.getElementById("wholestory")?.append(messageCard)
-};
+// const addMessageBox = (message: string, generated: boolean) => {
+//   const messageCard = document.createElement("div");
+//   messageCard.innerText = message;
+//   messageCard.className = "storymessage " + (generated ? "generated":"manual");
+//   document.getElementById("wholestory")?.append(messageCard)
+// };
 
 const editorElem = document.getElementById("editor");
 const performCompletion = async () => {
-  const newMessage = quill.getText().trim();
-  if (newMessage.length !== 0) {
-    // if no message from the user, ignore it and keep generating
-    messages.push(newMessage);
-    addMessageBox(newMessage, false);
-  }
-  setLoadingState("Loading...")
+  let messages = quill.getText().trim().split("\n");
+  messages = messages.filter(m => m.length > 0);
+  console.log("messages", messages);
+  addLoadingState("Loading...")
   try {
     const response = await fetch("/api/continue", {
       method: "POST",
@@ -48,10 +44,10 @@ const performCompletion = async () => {
       body: JSON.stringify({messages})
     });
     const generated_msg = await response.json();
-    addMessageBox(generated_msg.new_message, true);
+    // addMessageBox(generated_msg.new_message, true);
     messages.push(generated_msg.new_message);
-    quill.setText("");
-    setLoadingState(`Response generated in ${generated_msg.elapsed} seconds`);
+    quill.setText(messages.join("\n"));
+    addLoadingState(`Response generated in ${generated_msg.elapsed} seconds`);
   }
   catch(error){
     window.alert(error);
