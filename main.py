@@ -31,7 +31,7 @@ async def continue_text(story: StoryMessages):
         new_entry = new_entry.rsplit('.', 1)[0] + '.'
     with open("cached_story.md", "w") as fw:
         for m in story.messages:
-            fw.write("\n---------\n")
+            fw.write("\n\n")
             fw.write(m)
             fw.write("\n")
 

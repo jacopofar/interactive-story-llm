@@ -33,7 +33,7 @@ const performCompletion = async () => {
   let messages = quill.getText().trim().split("\n");
   messages = messages.filter(m => m.length > 0);
   console.log("messages", messages);
-  addLoadingState("Loading...")
+  addLoadingState((new Date()).toISOString().substring(0,19) + "Loading...")
   try {
     const response = await fetch("/api/continue", {
       method: "POST",
